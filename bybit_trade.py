@@ -4,16 +4,10 @@ from bybit_trade_funcions_git_hub import *
 session_unauth = spot.HTTP(endpoint="https://api.bybit.com")
 
 
-# PARAMETRY
+# PARAMETERS
 ##############################################################################################
 symbol_long = "BTC3LUSDT" 
 symbol_short ="BTC3SUSDT"
-
-# symbol_short ="BTCUSDT"
-# symbol_long = "BTCUSDT" 
-
-# symbol_long = "ATOM2LUSDT" 
-# symbol_short ="FTM2SUSDT" 
 
 
 ##############################################################################################
@@ -93,33 +87,33 @@ while True:
     #
     ##############################################################################################
     
-        #  OBLICZANIE BALANCU  DLA  POSZCZEGÓLNYCH  TOKENÓW
+        #  CALCULATION  -  BALANCE FOR INDIVIDUAL TOKENS
         ##########################################################################
         balance_l = balance_long(close_l, invested_capital*float(1.0), LONG)   # 1.1 
         balance_s = balance_short(close_s, invested_capital*float(1.0), SHORT)
         
-        # OBLICZANIE  CAŁKOWITEJ WARTOŚĆI PORTFELA    
-        # (WZGLĘDEM PIERWSZEJ CENY ZAMKNIĘCIA)
+        # CALCULATION  -  TOTAL WALLET VALUE   
+        # (RELATING FIRST CLOS PRICE )
         ##########################################################################
         balance = balance_sl(balance_s, balance_l)
 
-        # OBLICZANIE  CAŁKOWITEJ WARTOŚĆI PORTFELA    -  DODANIE INDEXU CZASU 
+        # CALCULATION  -  TOTAL WALLET VALUE    -  ADDING TIME INDEX
         ##########################################################################
         times_log = timeseries_log(LONG, balance)
         # t_3 = time()
 
-        # OBLICZANIE DANYCH STATYSTYCZNYCH 
+        # CALCULATION OF STATISTICAL DATA 
         ##########################################################################
         ts = ts_log(times_log)                              #  "timeseries_log"   opakowane w:   pandas.Series
         time_log  = ts.index                                 #  tylko   czas,   bez indeksu danych 
         data_log = ts.reset_index(drop=True)       #  tylko   dane,   bez indeksu czasu     -    cała kowita wartość portfela  (nie uwzględniająca prowizji)
 
-        #  OBLICZANIE ŚREDNICH KROCZĄCYCH   
-        # ( NA PODSTAWIE WSZEŚNIEJ OBLICZONYCH DANYCH STATYSTYCZNYCH )
+        #  CALCULATION  -  MOVING DATA 
+        # ( BASED ON PREVIOUSLY CALCULATED STATISTICAL DATA )
         ##########################################################################
         MA_log, MSTD_log = MA_log__MSTD_log(ts, range_log)
         
-        #  OBLICZANIE ŚREDNICH KROCZĄCYCH  c.d.
+        #  CALCULATION  -  MOVING DATA  c.d.
         ##########################################################################
         ma_log, std_plus_log, std_minus_log = \
         ma_log__std_plus_log__std_minus_log(balance, range_log, multiplier_plus_log, indicator_minus_log, data_log, invested_capital, MA_log, MSTD_log)
